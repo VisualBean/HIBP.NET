@@ -51,7 +51,8 @@ namespace HIBP
         /// <param name="account">account for which you want breaches</param>
         public async Task<IEnumerable<Breach>> GetBreachesForAccountAsync(string account, string domain = null, bool includeUnverified = false)
         {
-            var endpoint = $"breachedaccount/{account}/?includeUnverified={includeUnverified.ToBooleanString()}";
+            var _account = System.Web.HttpUtility.UrlEncode(account);
+            var endpoint = $"breachedaccount/{_account}/?includeUnverified={includeUnverified.ToBooleanString()}";
             if (domain != null)
                 endpoint += $"&domain={domain}";
 
