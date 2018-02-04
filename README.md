@@ -4,3 +4,17 @@
 A simple .NET Core wrapper for the HIBP (Have I been pwned?) Api
 
 Full credits given to Troy Hunt for creating and managing [Have I been pwned?](https://haveibeenpwned.com).
+
+Usage:
+===
+All endpoints has a sync and an async version and the APIs support IDisposable
+
+### Example:
+```
+using (var api = new HIBP.BreachApi("MyTotallyAwesomeService"))
+{
+    var result = await api.GetBreachesAsync();
+    foreach(var breach in result)
+        Console.WriteLine(breach.ToString());
+}
+```
