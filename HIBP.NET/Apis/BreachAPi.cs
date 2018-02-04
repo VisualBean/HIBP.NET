@@ -13,7 +13,7 @@ namespace HIBP
     /// </summary>
     /// <seealso cref="HIBP.BaseApi" />
     /// <seealso cref="HIBP.IBreachApi" />
-    public class BreachApi : BaseApi, IBreachApi
+    public sealed class BreachApi : BaseApi, IBreachApi
     {
         /// <summary>
         /// Default Constructor
@@ -116,5 +116,6 @@ namespace HIBP
 
             return result;
         }
+        
     }
 }

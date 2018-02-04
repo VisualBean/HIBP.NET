@@ -10,7 +10,7 @@ namespace HIBP
     /// </summary>
     /// <seealso cref="HIBP.BaseApi" />
     /// <seealso cref="HIBP.IPwnedPasswordApi" />
-    public class PwnedPasswordApi : BaseApi, IPwnedPasswordApi
+    public sealed class PwnedPasswordApi : BaseApi, IPwnedPasswordApi
     {
         /// <summary>
         /// Default Constructor
