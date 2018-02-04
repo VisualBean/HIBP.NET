@@ -8,14 +8,13 @@ using HIBP.Extensions;
 
 namespace HIBP
 {
-    public class BaseApi
+    public class BaseApi : IDisposable
     {
         private BaseApi()
         {
-
         }
 
-        protected readonly HttpClient client = new HttpClient();
+        protected readonly HttpClient client;
 
         /// <summary>
         /// The name of the client calling the API (used as user-agent).
@@ -23,7 +22,10 @@ namespace HIBP
         /// <param name="serviceName"></param>
         protected BaseApi(string serviceName)
         {
-            client.BaseAddress = new Uri("https://haveibeenpwned.com/api/v2/");
+            client = new HttpClient
+            {
+                BaseAddress = new Uri("https://haveibeenpwned.com/api/v2/")
+            };
             client.DefaultRequestHeaders.Add("user-agent", serviceName);
         }
         /// <summary>
@@ -53,6 +55,11 @@ namespace HIBP
                     throw new Exception("Your request has been throttled, please try again later");
             }
             return response;
+        }
+
+        public void Dispose()
+        {
+           client.Dispose();
         }
     }
 }
