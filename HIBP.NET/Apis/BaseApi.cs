@@ -1,10 +1,9 @@
-﻿using HIBP.Responses;
+﻿using HIBP.Extensions;
 using System;
-using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
-using HIBP.Extensions;
 
 namespace HIBP
 {
@@ -15,13 +14,17 @@ namespace HIBP
         }
 
         protected readonly HttpClient client;
-
+        private readonly CancellationTokenSource cancellationTokenSource;
+        protected readonly CancellationToken cancellationToken;
         /// <summary>
         /// The name of the client calling the API (used as user-agent).
         /// </summary>
         /// <param name="serviceName"></param>
         protected BaseApi(string serviceName)
         {
+            cancellationTokenSource = new CancellationTokenSource();
+            cancellationToken = cancellationTokenSource.Token;
+
             client = new HttpClient
             {
                 BaseAddress = new Uri("https://haveibeenpwned.com/api/v2/")
@@ -36,7 +39,7 @@ namespace HIBP
         /// <returns><see cref="Task{T}"/></returns>
         protected async Task<T> GetAsync<T>(string requestUri)
         {
-            var response = await client.GetAsync(requestUri);
+            var response = await client.GetAsync(requestUri, cancellationToken);
             switch (response.StatusCode)
             {
                 case (HttpStatusCode)429:
@@ -48,7 +51,7 @@ namespace HIBP
         }
         protected async Task<HttpResponseMessage> GetAsync(string requestUri)
         {
-            var response = await client.GetAsync(requestUri);
+            var response = await client.GetAsync(requestUri, cancellationToken);
             switch (response.StatusCode)
             {
                 case (HttpStatusCode)429:
@@ -59,7 +62,9 @@ namespace HIBP
 
         public void Dispose()
         {
-           client.Dispose();
+            cancellationTokenSource.Cancel();
+            client.Dispose();
+
         }
     }
 }
