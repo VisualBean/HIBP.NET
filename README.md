@@ -10,7 +10,7 @@ Usage:
 All endpoints has a sync and an async version and the APIs support IDisposable
 
 ### Example:
-```
+```csharp
 using (var api = new HIBP.BreachApi("MyTotallyAwesomeService"))
 {
     var result = await api.GetBreachesAsync();
