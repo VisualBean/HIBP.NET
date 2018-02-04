@@ -13,7 +13,7 @@ namespace HIBP
     public sealed class PwnedPasswordApi : BaseApi, IPwnedPasswordApi
     {
         /// <summary>
-        /// Default Constructor
+        /// Initializes the PwnedPassword API with a <paramref name="serviceName"/>
         /// </summary>
         /// <param name="serviceName">The name of the client calling the API (used as user-agent).</param>
         public PwnedPasswordApi(string serviceName) : base(serviceName)

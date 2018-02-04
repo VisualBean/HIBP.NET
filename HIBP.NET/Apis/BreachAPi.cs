@@ -16,7 +16,7 @@ namespace HIBP
     public sealed class BreachApi : BaseApi, IBreachApi
     {
         /// <summary>
-        /// Default Constructor
+        /// Initializes the BreachApi with a <paramref name="serviceName"/>
         /// </summary>
         /// <param name="serviceName"> The name of the client calling the API (used as user-agent).</param>
         public BreachApi(string serviceName) : base(serviceName)
@@ -24,7 +24,7 @@ namespace HIBP
         }
 
         /// <summary>
-        /// Gets a breach.
+        /// Gets a breach by <paramref name="name"/>.
         /// </summary>
         /// <param name="name">The name of the breach</param>
         /// <returns>
