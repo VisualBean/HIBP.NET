@@ -8,34 +8,81 @@ using System.Threading.Tasks;
 
 namespace HIBP
 {
+    /// <summary>
+    /// The Have I Been Pwned Breach API Wrapper.
+    /// </summary>
+    /// <seealso cref="HIBP.BaseApi" />
+    /// <seealso cref="HIBP.IBreachApi" />
     public class BreachApi : BaseApi, IBreachApi
     {
         /// <summary>
-        /// The name of the client calling the API (used as user-agent).
+        /// Default Constructor
         /// </summary>
-        /// <param name="serviceName"></param>
+        /// <param name="serviceName"> The name of the client calling the API (used as user-agent).</param>
         public BreachApi(string serviceName) : base(serviceName)
         {
         }
 
         /// <summary>
-        /// Returns a breach by name.
+        /// Gets a breach.
         /// </summary>
-        /// <param name="domain">optional domain parameter, if you only want breaches for a certain domain. example: adobe.com</param>
-        /// <param name="includeUnverified">Include unverified breaches.</param>
-        /// <returns></returns>
-        public async Task<Breach> GetBreachAsync(string name)
+        /// <param name="name">The name of the breach</param>
+        /// <returns>
+        /// <see cref="Breach"/> if a breach of that name could be found
+        /// </returns>
+        public Breach GetBreach(string name)
         {
-            var endpoint = $"breaches/{name}";
-
-           return await GetAsync<Breach>(endpoint);
+            return Task.Run(() => GetBreachAsync(name)).Result;
         }
         /// <summary>
-        /// Returns all breaches.
+        /// Gets all breaches.
         /// </summary>
-        /// <param name="domain">optional domain parameter, if you only want breaches for a certain domain. example: adobe.com</param>
-        /// <param name="includeUnverified">Include unverified breaches.</param>
-        /// <returns></returns>
+        /// <param name="domain">The domain.</param>
+        /// <param name="includeUnverified">if set to <c>true</c> [include unverified].</param>
+        /// <returns>
+        /// A list of <see cref="Breach"/>
+        /// </returns>
+        public IEnumerable<Breach> GetBreaches(string domain = null, bool includeUnverified = false)
+        {
+            return Task.Run(() => GetBreachesAsync(domain, includeUnverified)).Result;
+        }
+        /// <summary>
+        /// Gets all breaches for account.
+        /// </summary>
+        /// <param name="account">The account name</param>
+        /// <param name="domain">The domain name</param>
+        /// <param name="includeUnverified">if set to <c>true</c> [include unverified].</param>
+        /// <returns>
+        /// A list of <see cref="Breach"/>
+        /// </returns>
+        public IEnumerable<Breach> GetBreachesForAccount(string account, string domain = null, bool includeUnverified = false)
+        {
+            return Task.Run(() => GetBreachesForAccountAsync(account, domain, includeUnverified)).Result;
+        }
+        /// <summary>
+        /// Gets the breach asynchronous.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <returns>
+        /// <see cref="Breach"/> if a breach of that name could be found
+        /// </returns>
+        public async Task<Breach> GetBreachAsync(string name)
+        {
+            if (string.IsNullOrEmpty(name))
+                throw new ArgumentNullException("name");
+
+            var endpoint = $"breaches/{name}";
+
+            return await GetAsync<Breach>(endpoint);
+        }
+        /// <summary>
+        /// Gets all breaches asynchronous.
+        /// </summary>
+        /// <param name="domain">The domain name.</param>
+        /// <param name="includeUnverified">if set to <c>true</c> [include unverified].</param>
+        /// <returns>
+        /// A list of <see cref="Breach"/>
+        /// </returns>
         public async Task<IEnumerable<Breach>> GetBreachesAsync(string domain = null, bool includeUnverified = false)
         {
             var endpoint = $"breaches?includeUnverified={includeUnverified.ToBooleanString()}";
@@ -45,12 +92,19 @@ namespace HIBP
             return await GetAsync<IEnumerable<Breach>>(endpoint);
         }
         /// <summary>
-        /// Returns breaches for a certain account.
-        /// Returns an empty list if no breaches were found for account.
+        /// Gets the breaches for account asynchronous.
         /// </summary>
-        /// <param name="account">account for which you want breaches</param>
+        /// <param name="account">The account name.</param>
+        /// <param name="domain">The domain name.</param>
+        /// <param name="includeUnverified">if set to <c>true</c> [include unverified].</param>
+        /// <returns>
+        /// A list of <see cref="Breach"/>
+        /// </returns>
         public async Task<IEnumerable<Breach>> GetBreachesForAccountAsync(string account, string domain = null, bool includeUnverified = false)
         {
+            if (string.IsNullOrEmpty(account))
+                throw new ArgumentNullException("account");
+
             var _account = System.Web.HttpUtility.UrlEncode(account);
             var endpoint = $"breachedaccount/{_account}/?includeUnverified={includeUnverified.ToBooleanString()}";
             if (domain != null)

@@ -5,23 +5,43 @@ using System.Threading.Tasks;
 
 namespace HIBP
 {
+    /// <summary>
+    /// The Have I Been Pwned PwnedPassword API Wrapper
+    /// </summary>
+    /// <seealso cref="HIBP.BaseApi" />
+    /// <seealso cref="HIBP.IPwnedPasswordApi" />
     public class PwnedPasswordApi : BaseApi, IPwnedPasswordApi
     {
         /// <summary>
-        /// The name of the client calling the API (used as user-agent).
+        /// Default Constructor
         /// </summary>
-        /// <param name="serviceName"></param>
+        /// <param name="serviceName">The name of the client calling the API (used as user-agent).</param>
         public PwnedPasswordApi(string serviceName) : base(serviceName)
         {
         }
-
         /// <summary>
-        /// Returns wether or not a password has been part of a known breach.
+        /// Determines whether [is password pwned] [the specified plain text password or password hash].
         /// </summary>
-        /// <param name="plainTextPasswordOrPasswordHash">Passwords can be plain text strings or a SHA1 hash of the password; HIBP will auto-detect the format and search accordingly.</param>
-        /// <returns></returns>
-        public async Task<bool> IsPasswordPwned(string plainTextPasswordOrPasswordHash)
+        /// <param name="plainTextPasswordOrPAsswordHash">The plain text password or password hash.</param>
+        /// <returns>
+        ///   <c>true</c> if password has been pwned; otherwise, <c>false</c>.
+        /// </returns>
+        public bool IsPasswordPwned(string plainTextPasswordOrPAsswordHash)
         {
+            return Task.Run(() => IsPasswordPwnedAsync(plainTextPasswordOrPAsswordHash)).Result;
+        }
+        /// <summary>
+        /// Determines whether [is password pwned asynchronous] [the specified plain text password or password hash].
+        /// </summary>
+        /// <param name="plainTextPasswordOrPasswordHash">The plain text password or password hash.</param>
+        /// <returns>
+        ///  <c>true</c> if password has been pwned; otherwise, <c>false</c>.
+        /// </returns>
+        public async Task<bool> IsPasswordPwnedAsync(string plainTextPasswordOrPasswordHash)
+        {
+            if (string.IsNullOrEmpty(plainTextPasswordOrPasswordHash))
+                throw new ArgumentNullException("plainTextPasswordOrPasswordHash");
+
             var endpoint = $"pwnedpassword/{plainTextPasswordOrPasswordHash}";
             var response = await GetAsync(endpoint);
             if (response.IsSuccessStatusCode)

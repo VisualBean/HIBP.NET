@@ -26,8 +26,12 @@ namespace HIBP
             client.BaseAddress = new Uri("https://haveibeenpwned.com/api/v2/");
             client.DefaultRequestHeaders.Add("user-agent", serviceName);
         }
-        
-
+        /// <summary>
+        /// Basic GetAsync T
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="requestUri"></param>
+        /// <returns><see cref="Task{T}"/></returns>
         protected async Task<T> GetAsync<T>(string requestUri)
         {
             var response = await client.GetAsync(requestUri);

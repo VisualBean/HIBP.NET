@@ -4,6 +4,7 @@ namespace HIBP
 {
     public interface IPwnedPasswordApi
     {
-        Task<bool> IsPasswordPwned(string plainTextPasswordOrPasswordHash);
+        bool IsPasswordPwned(string plainTextPasswordOrPasswordHash);
+        Task<bool> IsPasswordPwnedAsync(string plainTextPasswordOrPasswordHash);
     }
 }
