@@ -21,6 +21,7 @@ namespace HIBP
         /// <param name="serviceName">The name of the client calling the API (used as user-agent).</param>
         public PwnedPasswordApi(string serviceName) : base(serviceName)
         {
+            client.BaseAddress = new Uri("https://api.pwnedpasswords.com/");
         }
         /// <summary>
         /// Determines whether [is password pwned] [the specified plain text password or password hash].
@@ -67,14 +68,23 @@ namespace HIBP
                 throw new ArgumentNullException("plainTextPassword");
 
             var sha1 = plainTextPassword.ToSHA1();
-            var First5 = sha1.Substring(0, 4);
+            var First5 = sha1.Substring(0, 5);
             var endpoint = $"range/{First5}";
-            var response = await GetAsync<IEnumerable<RangeResponse>>(endpoint);
-            var found = response.FirstOrDefault(r => r.SHA1 == sha1);
-            if (found == null)
+            var response = await GetAsync(endpoint);
+            if (response.IsSuccessStatusCode)
+            {
+                var hashString = await response.Content.ReadAsStringAsync();
+                var hashes = hashString.Split(Environment.NewLine);
+                var found = hashes.FirstOrDefault(r => $"{First5}{r}".Contains(sha1));
+                if (found == null)
+                    return 0;
+                return Convert.ToInt32(found.Split(':')[1]);
+            }
+            else
+            {
                 return 0;
-
-            return found.TimesSeen;
+            }
+            
         }
     }
 }
