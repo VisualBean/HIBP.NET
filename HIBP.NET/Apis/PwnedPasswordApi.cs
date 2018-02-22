@@ -27,9 +27,9 @@ namespace HIBP
         /// </summary>
         /// <param name="plainTextPasswordOrPAsswordHash">The plain text password or password hash.</param>
         /// <returns>
-        ///   <c>true</c> if password has been pwned; otherwise, <c>false</c>.
+        ///  Count of times password has been seen. <c>0</c> if password has not been pwned.
         /// </returns>
-        public bool IsPasswordPwned(string plainTextPasswordOrPAsswordHash)
+        public int IsPasswordPwned(string plainTextPasswordOrPAsswordHash)
         {
             return Task.Run(() => IsPasswordPwnedAsync(plainTextPasswordOrPAsswordHash)).Result;
         }
@@ -38,19 +38,16 @@ namespace HIBP
         /// </summary>
         /// <param name="plainTextPasswordOrPasswordHash">The plain text password or password hash.</param>
         /// <returns>
-        ///  <c>true</c> if password has been pwned; otherwise, <c>false</c>.
+        ///  Count of times password has been seen. <c>0</c> if password has not been pwned.
         /// </returns>
-        public async Task<bool> IsPasswordPwnedAsync(string plainTextPasswordOrPasswordHash)
+        public async Task<int> IsPasswordPwnedAsync(string plainTextPasswordOrPasswordHash)
         {
             if (string.IsNullOrEmpty(plainTextPasswordOrPasswordHash))
                 throw new ArgumentNullException("plainTextPasswordOrPasswordHash");
 
             var endpoint = $"pwnedpassword/{plainTextPasswordOrPasswordHash}";
-            var response = await GetAsync(endpoint);
-            if (response.IsSuccessStatusCode)
-                return true;
-            else
-                return false;
+            var response = await GetAsync<int>(endpoint);
+            return response;
         }
         public int IsPasswordPwnedSafe(string plainTextPassword)
         {
