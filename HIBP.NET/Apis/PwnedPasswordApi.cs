@@ -1,5 +1,8 @@
-﻿using System;
+﻿using HIBP.Extensions;
+using HIBP.Responses;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -48,6 +51,33 @@ namespace HIBP
                 return true;
             else
                 return false;
+        }
+        public int IsPasswordPwnedSafe(string plainTextPassword)
+        {
+            return Task.Run(() => IsPasswordPwnedSafeAsync(plainTextPassword)).Result;
+        }
+        /// <summary>
+        /// Performs searching in memory instead of sending the entire password/sha1 over the wire.
+        /// Will SHA1 the password internally
+        /// </summary>
+        /// <param name="plainTextPassword">PlainText Password</param>
+        /// <returns>
+        /// Amount of times the password has been seen in breaches <c>0</c> if not seen. 
+        /// </returns>
+        public async Task<int> IsPasswordPwnedSafeAsync(string plainTextPassword)
+        {
+            if (string.IsNullOrEmpty(plainTextPassword))
+                throw new ArgumentNullException("plainTextPassword");
+
+            var sha1 = plainTextPassword.ToSHA1();
+            var First5 = sha1.Substring(0, 4);
+            var endpoint = $"range/{First5}";
+            var response = await GetAsync<IEnumerable<RangeResponse>>(endpoint);
+            var found = response.FirstOrDefault(r => r.SHA1 == sha1);
+            if (found == null)
+                return 0;
+
+            return found.TimesSeen;
         }
     }
 }

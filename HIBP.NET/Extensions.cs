@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -18,6 +19,21 @@ namespace HIBP.Extensions
     }
     internal static class StringExtensions
     {
+        internal static string ToSHA1(this string s)
+        {
+            using (var provider = new SHA1Managed())
+            {
+                var hash = provider.ComputeHash(Encoding.UTF8.GetBytes(s));
+                var sb = new StringBuilder(hash.Length * 2);
+                foreach (var @byte in hash)
+                {
+                    sb.Append(@byte.ToString("X2"));
+                }
+
+                return sb.ToString();
+            }
+           
+        }
         public static string ToBooleanString(this bool b)
         {
             return b == true ? "true" : "false";
