@@ -34,6 +34,10 @@ namespace HIBP.Extensions
             }
            
         }
+        public static bool IsNullEmptyOrWhitespace(this string s)
+        {
+            return string.IsNullOrEmpty(s) || string.IsNullOrWhiteSpace(s);
+        }
         public static string ToBooleanString(this bool b)
         {
             return b == true ? "true" : "false";
