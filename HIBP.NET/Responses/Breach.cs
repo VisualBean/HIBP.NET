@@ -4,7 +4,7 @@ using System.Text;
 
 namespace HIBP.Responses
 {
-    public class BreachResponse
+    public class Breach
     {
         public string Name { get; set; }
         public string Title { get; set; }

@@ -60,7 +60,7 @@ namespace HIBP
         /// </summary>
         /// <param name="plainTextPassword">PlainText Password</param>
         /// <returns>
-        /// Amount of times the password has been seen in breaches <c>0</c> if not seen. 
+        /// Amount of times the password has been seen in breaches. <c>0</c> if not seen. 
         /// </returns>
         public async Task<int> IsPasswordPwnedSafeAsync(string plainTextPassword)
         {
@@ -68,14 +68,14 @@ namespace HIBP
                 throw new ArgumentNullException("plainTextPassword");
 
             var sha1 = plainTextPassword.ToSHA1();
-            var First5 = sha1.Substring(0, 5);
-            var endpoint = $"range/{First5}";
+            var first5 = sha1.Substring(0, 5);
+            var endpoint = $"range/{first5}";
             var response = await GetAsync(endpoint);
             if (response.IsSuccessStatusCode)
             {
                 var hashString = await response.Content.ReadAsStringAsync();
                 var hashes = hashString.Split(Environment.NewLine);
-                var found = hashes.FirstOrDefault(r => $"{First5}{r}".Contains(sha1));
+                var found = hashes.FirstOrDefault(h => $"{first5}{h}".Contains(sha1));
                 if (found == null)
                     return 0;
                 return Convert.ToInt32(found.Split(':')[1]);

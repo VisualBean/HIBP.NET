@@ -28,9 +28,9 @@ namespace HIBP
         /// </summary>
         /// <param name="name">The name of the breach</param>
         /// <returns>
-        /// <see cref="BreachResponse"/> if a breach of that name could be found
+        /// <see cref="Breach"/> if a breach of that name could be found
         /// </returns>
-        public BreachResponse GetBreach(string name)
+        public Breach GetBreach(string name)
         {
             return Task.Run(() => GetBreachAsync(name)).Result;
         }
@@ -40,9 +40,9 @@ namespace HIBP
         /// <param name="domain">The domain.</param>
         /// <param name="includeUnverified">if set to <c>true</c> [include unverified].</param>
         /// <returns>
-        /// A list of <see cref="BreachResponse"/>
+        /// A list of <see cref="Breach"/>
         /// </returns>
-        public IEnumerable<BreachResponse> GetBreaches(string domain = null, bool includeUnverified = false)
+        public IEnumerable<Breach> GetBreaches(string domain = null, bool includeUnverified = false)
         {
             return Task.Run(() => GetBreachesAsync(domain, includeUnverified)).Result;
         }
@@ -53,9 +53,9 @@ namespace HIBP
         /// <param name="domain">The domain name</param>
         /// <param name="includeUnverified">if set to <c>true</c> [include unverified].</param>
         /// <returns>
-        /// A list of <see cref="BreachResponse"/>
+        /// A list of <see cref="Breach"/>
         /// </returns>
-        public IEnumerable<BreachResponse> GetBreachesForAccount(string account, string domain = null, bool includeUnverified = false)
+        public IEnumerable<Breach> GetBreachesForAccount(string account, string domain = null, bool includeUnverified = false)
         {
             return Task.Run(() => GetBreachesForAccountAsync(account, domain, includeUnverified)).Result;
         }
@@ -64,16 +64,16 @@ namespace HIBP
         /// </summary>
         /// <param name="name">The name.</param>
         /// <returns>
-        /// <see cref="BreachResponse"/> if a breach of that name could be found
+        /// <see cref="Breach"/> if a breach of that name could be found
         /// </returns>
-        public async Task<BreachResponse> GetBreachAsync(string name)
+        public async Task<Breach> GetBreachAsync(string name)
         {
             if (string.IsNullOrEmpty(name))
                 throw new ArgumentNullException("name");
 
             var endpoint = $"breaches/{name}";
 
-            return await GetAsync<BreachResponse>(endpoint);
+            return await GetAsync<Breach>(endpoint);
         }
         /// <summary>
         /// Gets all breaches asynchronous.
@@ -81,15 +81,15 @@ namespace HIBP
         /// <param name="domain">The domain name.</param>
         /// <param name="includeUnverified">if set to <c>true</c> [include unverified].</param>
         /// <returns>
-        /// A list of <see cref="BreachResponse"/>
+        /// A list of <see cref="Breach"/>
         /// </returns>
-        public async Task<IEnumerable<BreachResponse>> GetBreachesAsync(string domain = null, bool includeUnverified = false)
+        public async Task<IEnumerable<Breach>> GetBreachesAsync(string domain = null, bool includeUnverified = false)
         {
             var endpoint = $"breaches?includeUnverified={includeUnverified.ToBooleanString()}";
             if (domain != null)
                 endpoint += $"&domain={domain}";
 
-            return await GetAsync<IEnumerable<BreachResponse>>(endpoint);
+            return await GetAsync<IEnumerable<Breach>>(endpoint);
         }
         /// <summary>
         /// Gets the breaches for account asynchronous.
@@ -98,9 +98,9 @@ namespace HIBP
         /// <param name="domain">The domain name.</param>
         /// <param name="includeUnverified">if set to <c>true</c> [include unverified].</param>
         /// <returns>
-        /// A list of <see cref="BreachResponse"/>
+        /// A list of <see cref="Breach"/>
         /// </returns>
-        public async Task<IEnumerable<BreachResponse>> GetBreachesForAccountAsync(string account, string domain = null, bool includeUnverified = false)
+        public async Task<IEnumerable<Breach>> GetBreachesForAccountAsync(string account, string domain = null, bool includeUnverified = false)
         {
             if (string.IsNullOrEmpty(account))
                 throw new ArgumentNullException("account");
@@ -110,9 +110,9 @@ namespace HIBP
             if (domain != null)
                 endpoint += $"&domain={domain}";
 
-            var result = await GetAsync<IEnumerable<BreachResponse>>(endpoint);
+            var result = await GetAsync<IEnumerable<Breach>>(endpoint);
             if (result == null)
-                return new List<BreachResponse>();
+                return new List<Breach>();
 
             return result;
         }
