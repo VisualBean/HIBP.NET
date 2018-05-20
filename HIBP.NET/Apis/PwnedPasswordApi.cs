@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace HIBP
@@ -19,41 +20,17 @@ namespace HIBP
         /// Initializes the PwnedPassword API with a <paramref name="serviceName"/>
         /// </summary>
         /// <param name="serviceName">The name of the client calling the API (used as user-agent).</param>
-        public PwnedPasswordApi(string serviceName) : base(serviceName)
+        public PwnedPasswordApi(string serviceName, CancellationToken cancellationToken = default(CancellationToken)) : base(serviceName, cancellationToken)
         {
             client.BaseAddress = new Uri("https://api.pwnedpasswords.com/");
         }
-        /// <summary>
-        /// Determines whether [is password pwned] [the specified plain text password or password hash].
-        /// </summary>
-        /// <param name="plainTextPasswordOrPAsswordHash">The plain text password or password hash.</param>
-        /// <returns>
-        ///  Count of times password has been seen. <c>0</c> if password has not been pwned.
-        /// </returns>
-        public int IsPasswordPwned(string plainTextPasswordOrPAsswordHash)
-        {
-            return Task.Run(() => IsPasswordPwnedAsync(plainTextPasswordOrPAsswordHash)).Result;
-        }
-        /// <summary>
-        /// Determines whether [is password pwned asynchronous] [the specified plain text password or password hash].
-        /// </summary>
-        /// <param name="plainTextPasswordOrPasswordHash">The plain text password or password hash.</param>
-        /// <returns>
-        ///  Count of times password has been seen. <c>0</c> if password has not been pwned.
-        /// </returns>
-        public async Task<int> IsPasswordPwnedAsync(string plainTextPasswordOrPasswordHash)
-        {
-            if (string.IsNullOrEmpty(plainTextPasswordOrPasswordHash))
-                throw new ArgumentNullException("plainTextPasswordOrPasswordHash");
 
-            var endpoint = $"pwnedpassword/{plainTextPasswordOrPasswordHash}";
-            var response = await GetAsync<int>(endpoint);
-            return response;
-        }
-        public int IsPasswordPwnedSafe(string plainTextPassword)
+
+        public int IsPasswordPwned(string plainTextPassword)
         {
-            return Task.Run(() => IsPasswordPwnedSafeAsync(plainTextPassword)).Result;
+            return Task.Run(() => IsPasswordPwnedAsync(plainTextPassword)).Result;
         }
+
         /// <summary>
         /// Performs searching in memory instead of sending the entire password/sha1 over the wire.
         /// Will SHA1 the password internally
@@ -62,29 +39,33 @@ namespace HIBP
         /// <returns>
         /// Amount of times the password has been seen in breaches. <c>0</c> if not seen. 
         /// </returns>
-        public async Task<int> IsPasswordPwnedSafeAsync(string plainTextPassword)
+        public async Task<int> IsPasswordPwnedAsync(string plainTextPassword)
         {
             if (string.IsNullOrEmpty(plainTextPassword))
                 throw new ArgumentNullException("plainTextPassword");
 
             var sha1 = plainTextPassword.ToSHA1();
-            var first5 = sha1.Substring(0, 5);
-            var endpoint = $"range/{first5}";
+            var endpoint = $"range/{sha1.First5()}";
             var response = await GetAsync(endpoint);
             if (response.IsSuccessStatusCode)
             {
                 var hashString = await response.Content.ReadAsStringAsync();
-                var hashes = hashString.Split(Environment.NewLine);
-                var found = hashes.FirstOrDefault(h => $"{first5}{h}".Contains(sha1));
-                if (found == null)
-                    return 0;
-                return Convert.ToInt32(found.Split(':')[1]);
+                return ReduceResult(sha1, hashString);
             }
             else
             {
                 return 0;
             }
-            
+        }
+
+        private int ReduceResult(string hashToFind,string listOfHashes)
+        {
+            var hashes = listOfHashes.Split(Environment.NewLine);
+            var first5 = hashToFind.First5();
+            var found = hashes.FirstOrDefault(h => $"{first5}{h}".Contains(hashToFind));
+            if (found == null)
+                return 0;
+            return Convert.ToInt32(found.Split(':')[1]);
         }
     }
 }

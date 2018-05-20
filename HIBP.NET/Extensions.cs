@@ -34,10 +34,16 @@ namespace HIBP.Extensions
             }
            
         }
+        public static string First5(this string s)
+        {
+            return s.Substring(0, 5);
+        }
+
         public static bool IsNullEmptyOrWhitespace(this string s)
         {
             return string.IsNullOrEmpty(s) || string.IsNullOrWhiteSpace(s);
         }
+
         public static string ToBooleanString(this bool b)
         {
             return b == true ? "true" : "false";

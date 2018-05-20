@@ -16,17 +16,21 @@ namespace HIBP
         protected readonly HttpClient client;
         private readonly CancellationTokenSource cancellationTokenSource;
         protected readonly CancellationToken cancellationToken;
+
         /// <summary>
         /// The name of the client calling the API (used as user-agent).
         /// </summary>
         /// <param name="serviceName"></param>
-        protected BaseApi(string serviceName)
+        protected BaseApi(string serviceName, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (serviceName.IsNullEmptyOrWhitespace())
                 throw new ArgumentException("To interact with the HIBP API a name must be provided for the useragent string. This name is ment to be to distinguish your service from others.", nameof(serviceName));
 
-            cancellationTokenSource = new CancellationTokenSource();
-            cancellationToken = cancellationTokenSource.Token;
+            if (!cancellationToken.CanBeCanceled)
+            {
+                cancellationTokenSource = new CancellationTokenSource();
+                cancellationToken = cancellationTokenSource.Token;
+            }
 
             client = new HttpClient
             {
@@ -34,6 +38,7 @@ namespace HIBP
             };
             client.DefaultRequestHeaders.Add("user-agent", serviceName);
         }
+    
         /// <summary>
         /// Basic GetAsync T
         /// </summary>
@@ -45,6 +50,8 @@ namespace HIBP
             var response = await client.GetAsync(requestUri, cancellationToken);
             switch (response.StatusCode)
             {
+                case (HttpStatusCode)403:
+                    throw new ArgumentException("User-Agent not valid.");
                 case (HttpStatusCode)429:
                     throw new Exception("Your request has been throttled, please try again later");
                 case HttpStatusCode.NotFound:
@@ -52,11 +59,14 @@ namespace HIBP
             }
             return await response.Content.ReadAsJsonAsync<T>();
         }
+
         protected async Task<HttpResponseMessage> GetAsync(string requestUri)
         {
             var response = await client.GetAsync(requestUri, cancellationToken);
             switch (response.StatusCode)
             {
+                case (HttpStatusCode)403:
+                    throw new ArgumentException("User-Agent not valid.");
                 case (HttpStatusCode)429:
                     throw new Exception("Your request has been throttled, please try again later");
             }
@@ -65,7 +75,11 @@ namespace HIBP
 
         public void Dispose()
         {
-            cancellationTokenSource.Cancel();
+            if(cancellationTokenSource != null)
+            {
+                cancellationTokenSource.Cancel();
+            }
+            
             client.Dispose();
 
         }
