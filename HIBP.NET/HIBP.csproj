@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
     <PackageId>HIBP.NET</PackageId>
-    <Version>1.1.0</Version>
+    <Version>2.0.0</Version>
     <Authors>VisualBean</Authors>
     <Company>VisualBean</Company>
     <Product>HIBP.NET</Product>
@@ -11,12 +11,11 @@
     <PackageProjectUrl>https://github.com/VisualBean/HIBP.NET</PackageProjectUrl>
     <RepositoryUrl>https://github.com/VisualBean/HIBP.NET</RepositoryUrl>
     <RepositoryType>Github</RepositoryType>
-    <PackageTags>Security, HaveIBeenPwned, HIBP, API, Secure</PackageTags>
+    <PackageTags>Security, HaveIBeenPwned, HIBP, API, Secure, Have I Been Pwned, Troy Hunt</PackageTags>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <AssemblyVersion>1.1.0.0</AssemblyVersion>
-    <FileVersion>1.1.0.0</FileVersion>
-    <PackageReleaseNotes>In June - non range queries stop working.
-I've removed them. PwnedPasswordApi now only supports range queries.</PackageReleaseNotes>
+    <AssemblyVersion>2.0.0.0</AssemblyVersion>
+    <FileVersion>2.0.0.0</FileVersion>
+    <PackageReleaseNotes>The API's for searching breaches now required an APIkey, this has been implemented in the API. also non async methods has been removed.</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>

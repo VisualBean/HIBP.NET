@@ -21,10 +21,17 @@ namespace HIBP
         /// The name of the client calling the API (used as user-agent).
         /// </summary>
         /// <param name="serviceName"></param>
-        protected BaseApi(string serviceName, CancellationToken cancellationToken = default(CancellationToken))
+        protected BaseApi(string apiKey, string serviceName, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (serviceName.IsNullEmptyOrWhitespace())
+            {
                 throw new ArgumentException("To interact with the HIBP API a name must be provided for the useragent string. This name is ment to be to distinguish your service from others.", nameof(serviceName));
+            }
+
+            if (apiKey.IsNullEmptyOrWhitespace())
+            {
+                throw new ArgumentException("To interact with the HIBP API a valid apikey must be provided. You can get it here: https://haveibeenpwned.com/API/Key", nameof(apiKey));
+            }
 
             if (!cancellationToken.CanBeCanceled)
             {
@@ -32,11 +39,13 @@ namespace HIBP
                 cancellationToken = cancellationTokenSource.Token;
             }
 
-            client = new HttpClient
+            client = new HttpClient()
             {
-                BaseAddress = new Uri("https://haveibeenpwned.com/api/v2/")
+                BaseAddress = new Uri("https://haveibeenpwned.com/api/v3/"),                
             };
+
             client.DefaultRequestHeaders.Add("user-agent", serviceName);
+            client.DefaultRequestHeaders.Add("hibp-api-key", apiKey);
         }
     
         /// <summary>
@@ -48,28 +57,20 @@ namespace HIBP
         protected async Task<T> GetAsync<T>(string requestUri)
         {
             var response = await client.GetAsync(requestUri, cancellationToken);
-            switch (response.StatusCode)
+            ThrowOnErrorResponse(response.StatusCode);
+
+            if(response.StatusCode == HttpStatusCode.NotFound)
             {
-                case (HttpStatusCode)403:
-                    throw new ArgumentException("User-Agent not valid.");
-                case (HttpStatusCode)429:
-                    throw new Exception("Your request has been throttled, please try again later");
-                case HttpStatusCode.NotFound:
-                    return default(T);
+                return default(T);
             }
+
             return await response.Content.ReadAsJsonAsync<T>();
         }
 
         protected async Task<HttpResponseMessage> GetAsync(string requestUri)
         {
             var response = await client.GetAsync(requestUri, cancellationToken);
-            switch (response.StatusCode)
-            {
-                case (HttpStatusCode)403:
-                    throw new ArgumentException("User-Agent not valid.");
-                case (HttpStatusCode)429:
-                    throw new Exception("Your request has been throttled, please try again later");
-            }
+            ThrowOnErrorResponse(response.StatusCode);
             return response;
         }
 
@@ -81,7 +82,20 @@ namespace HIBP
             }
             
             client.Dispose();
+            GC.SuppressFinalize(this);
+        }
 
+        private void ThrowOnErrorResponse(HttpStatusCode statusCode)
+        {
+            switch (statusCode)
+            {
+                case (HttpStatusCode)401:
+                    throw new ArgumentException("ApiKey is not valid.");
+                case (HttpStatusCode)403:
+                    throw new ArgumentException("User-Agent is not valid.");
+                case (HttpStatusCode)429:
+                    throw new Exception("Your request has been throttled, please try again later");
+            }
         }
     }
 }

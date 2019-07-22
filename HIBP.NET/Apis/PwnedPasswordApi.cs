@@ -20,15 +20,9 @@ namespace HIBP
         /// Initializes the PwnedPassword API with a <paramref name="serviceName"/>
         /// </summary>
         /// <param name="serviceName">The name of the client calling the API (used as user-agent).</param>
-        public PwnedPasswordApi(string serviceName, CancellationToken cancellationToken = default(CancellationToken)) : base(serviceName, cancellationToken)
+        public PwnedPasswordApi(string serviceName, CancellationToken cancellationToken = default(CancellationToken)) : base("N/A", serviceName, cancellationToken)
         {
             client.BaseAddress = new Uri("https://api.pwnedpasswords.com/");
-        }
-
-
-        public int IsPasswordPwned(string plainTextPassword)
-        {
-            return Task.Run(() => IsPasswordPwnedAsync(plainTextPassword)).Result;
         }
 
         /// <summary>
@@ -39,14 +33,21 @@ namespace HIBP
         /// <returns>
         /// Amount of times the password has been seen in breaches. <c>0</c> if not seen. 
         /// </returns>
-        public async Task<int> IsPasswordPwnedAsync(string plainTextPassword)
+        public async Task<int> IsPasswordPwnedAsync(string plainTextPassword, bool isHash = false)
         {
             if (string.IsNullOrEmpty(plainTextPassword))
+            {
                 throw new ArgumentNullException("plainTextPassword");
+            }
+            string sha1 = plainTextPassword;
 
-            var sha1 = plainTextPassword.ToSHA1();
-            var endpoint = $"range/{sha1.First5()}";
-            var response = await GetAsync(endpoint);
+            if (!isHash)
+            {
+                sha1 = plainTextPassword.ToSHA1();
+            }
+
+            var response = await GetAsync($"range/{sha1.First5()}");
+
             if (response.IsSuccessStatusCode)
             {
                 var hashString = await response.Content.ReadAsStringAsync();
@@ -64,7 +65,9 @@ namespace HIBP
             var first5 = hashToFind.First5();
             var found = hashes.FirstOrDefault(h => $"{first5}{h}".Contains(hashToFind));
             if (found == null)
+            {
                 return 0;
+            }
             return Convert.ToInt32(found.Split(':')[1]);
         }
     }

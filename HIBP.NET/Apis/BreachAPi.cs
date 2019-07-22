@@ -19,46 +19,10 @@ namespace HIBP
         /// Initializes the BreachApi with a <paramref name="serviceName"/>
         /// </summary>
         /// <param name="serviceName"> The name of the client calling the API (used as user-agent).</param>
-        public BreachApi(string serviceName) : base(serviceName)
+        public BreachApi(string apiKey, string serviceName) : base(apiKey ,serviceName)
         {
         }
 
-        /// <summary>
-        /// Gets a breach by <paramref name="name"/>.
-        /// </summary>
-        /// <param name="name">The name of the breach</param>
-        /// <returns>
-        /// <see cref="Breach"/> if a breach of that name could be found
-        /// </returns>
-        public Breach GetBreach(string name)
-        {
-            return Task.Run(() => GetBreachAsync(name)).Result;
-        }
-        /// <summary>
-        /// Gets all breaches.
-        /// </summary>
-        /// <param name="domain">The domain.</param>
-        /// <param name="includeUnverified">if set to <c>true</c> [include unverified].</param>
-        /// <returns>
-        /// A list of <see cref="Breach"/>
-        /// </returns>
-        public IEnumerable<Breach> GetBreaches(string domain = null, bool includeUnverified = false)
-        {
-            return Task.Run(() => GetBreachesAsync(domain, includeUnverified)).Result;
-        }
-        /// <summary>
-        /// Gets all breaches for account.
-        /// </summary>
-        /// <param name="account">The account name</param>
-        /// <param name="domain">The domain name</param>
-        /// <param name="includeUnverified">if set to <c>true</c> [include unverified].</param>
-        /// <returns>
-        /// A list of <see cref="Breach"/>
-        /// </returns>
-        public IEnumerable<Breach> GetBreachesForAccount(string account, string domain = null, bool includeUnverified = false)
-        {
-            return Task.Run(() => GetBreachesForAccountAsync(account, domain, includeUnverified)).Result;
-        }
         /// <summary>
         /// Gets the breach asynchronous.
         /// </summary>
@@ -102,7 +66,7 @@ namespace HIBP
         /// </returns>
         public async Task<IEnumerable<Breach>> GetBreachesForAccountAsync(string account, string domain = null, bool includeUnverified = false)
         {
-            if (string.IsNullOrEmpty(account))
+            if (string.IsNullOrWhiteSpace(account))
                 throw new ArgumentNullException("account");
 
             var _account = System.Web.HttpUtility.UrlEncode(account);
