@@ -9,11 +9,10 @@ Full credits given to Troy Hunt for creating and managing [Have I been pwned?](h
 
 Usage:
 ===
-All endpoints has a sync and an async version and the APIs support IDisposable
 
 ### Example:
 ```csharp
-using (var api = new HIBP.BreachApi("MyTotallyAwesomeService"))
+using (var api = new HIBP.BreachApi("My-Api-Key", "MyTotallyAwesomeService"))
 {
     var result = await api.GetBreachesAsync();
     foreach(var breach in result)
