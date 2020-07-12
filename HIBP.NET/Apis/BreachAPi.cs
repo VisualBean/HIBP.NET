@@ -64,13 +64,13 @@ namespace HIBP
         /// <returns>
         /// A list of <see cref="Breach"/>
         /// </returns>
-        public async Task<IEnumerable<Breach>> GetBreachesForAccountAsync(string account, string domain = null, bool includeUnverified = false)
+        public async Task<IEnumerable<Breach>> GetBreachesForAccountAsync(string account, bool truncateResponse = false, string domain = null, bool includeUnverified = false)
         {
             if (string.IsNullOrWhiteSpace(account))
                 throw new ArgumentNullException("account");
 
             var _account = System.Web.HttpUtility.UrlEncode(account);
-            var endpoint = $"breachedaccount/{_account}/?includeUnverified={includeUnverified.ToBooleanString()}";
+            var endpoint = $"breachedaccount/{_account}/?truncateResponse={truncateResponse.ToBooleanString()}&includeUnverified={includeUnverified.ToBooleanString()}";
             if (domain != null)
                 endpoint += $"&domain={domain}";
 
