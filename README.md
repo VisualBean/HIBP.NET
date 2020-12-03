@@ -16,6 +16,45 @@ using (var api = new HIBP.BreachApi("My-Api-Key", "MyTotallyAwesomeService"))
 {
     var result = await api.GetBreachesAsync();
     foreach(var breach in result)
+    {
         Console.WriteLine(breach.ToString());
+    }
 }
 ```
+or with dependency injection
+```csharp
+public void ConfigureServices(IServiceCollection services)
+{
+    services.AddHIBP(c =>
+    {
+        c.ApiKey = new ApiKey("MyKey");
+        c.ServiceName = "MyServiceName";
+    });
+}
+
+class MyClass
+{
+    private readonly IBreachApi breachApi;
+    public MyClass(IBreachApi breachApi)
+    {
+        this.breachApi = breachApi;
+    }
+    
+    public async Task GetBreaches()
+    {
+        var breaches = this.breachApi.GetBreachesAsync();
+        foreach(var breach in breaches)
+        {
+            Console.WriteLine(breach.ToString());
+        }
+    }
+}
+```
+
+
+Changes
+===
+### Breaking change coming in version 3.0
+ApiKey has been refactored to be a class of its own.
+Version 3 is mostly minor refactorings and addition of cancellationtokens on particular API calls instead of from the Base.
+Added middleware for easier injection and setup in netcore projects.
