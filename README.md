@@ -16,7 +16,27 @@ using (var api = new HIBP.BreachApi("My-Api-Key", "MyTotallyAwesomeService"))
 {
     var result = await api.GetBreachesAsync();
     foreach(var breach in result)
+    {
         Console.WriteLine(breach.ToString());
+    }
+}
+
+class MyClass
+{
+    private readonly IBreachApi breachApi;
+    public MyClass(IBreachApi breachApi)
+    {
+        this.breachApi = breachApi;
+    }
+    
+    public async Task MyMethod()
+    {
+        var breaches = this.breachApi.GetBreachesAsync();
+        foreach(var breach in breaches)
+        {
+            Console.WriteLine(breach.ToString());
+        }
+    }
 }
 ```
 
