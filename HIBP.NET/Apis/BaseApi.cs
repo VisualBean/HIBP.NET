@@ -38,10 +38,6 @@
             this.Client.DefaultRequestHeaders.Add("hibp-api-key", apiKey.Key);
         }
 
-        private BaseApi()
-        {
-        }
-
         public void Dispose()
         {
             this.Client.Dispose();
