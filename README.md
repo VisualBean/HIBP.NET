@@ -43,10 +43,7 @@ class MyClass
     public async Task GetBreaches()
     {
         var breaches = this.breachApi.GetBreachesAsync();
-        foreach(var breach in breaches)
-        {
-            Console.WriteLine(breach.ToString());
-        }
+        ... do stuff..
     }
 }
 ```
