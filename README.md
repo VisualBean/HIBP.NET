@@ -19,3 +19,10 @@ using (var api = new HIBP.BreachApi("My-Api-Key", "MyTotallyAwesomeService"))
         Console.WriteLine(breach.ToString());
 }
 ```
+
+
+Changes
+===
+### Breaking change coming in version 3.0
+ApiKey has been refactored to be a class of its own.
+Version 3 is mostly minor refactorings and addition of cancellationtokens on particular API calls instead of from the Base.
