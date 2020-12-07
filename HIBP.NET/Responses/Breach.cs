@@ -9,19 +9,6 @@
     /// </summary>
     public class Breach
     {
-        private readonly string name;
-        private readonly string title;
-        private readonly string domain;
-        private readonly DateTime breachDate;
-        private readonly DateTime addedDate;
-        private readonly DateTime modifiedDate;
-        private readonly int pwnCount;
-        private readonly string description;
-        private readonly List<string> dataClasses;
-        private readonly bool isVerified;
-        private readonly bool isSensitive;
-        private readonly bool isRetired;
-        private readonly bool isSpamList;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Breach"/> class.
@@ -41,47 +28,131 @@
         /// <param name="isSpamList">if set to <c>true</c> [is spam list].</param>
         public Breach(string name, string title, string domain, DateTime breachDate, DateTime addedDate, DateTime modifiedDate, int pwnCount, string description, List<string> dataClasses, bool isVerified, bool isSensitive, bool isRetired, bool isSpamList)
         {
-            this.name = name;
-            this.title = title;
-            this.domain = domain;
-            this.breachDate = breachDate;
-            this.addedDate = addedDate;
-            this.modifiedDate = modifiedDate;
-            this.pwnCount = pwnCount;
-            this.description = description;
-            this.dataClasses = dataClasses;
-            this.isVerified = isVerified;
-            this.isSensitive = isSensitive;
-            this.isRetired = isRetired;
-            this.isSpamList = isSpamList;
+            this.Name = name;
+            this.Title = title;
+            this.Domain = domain;
+            this.BreachDate = breachDate;
+            this.AddedDate = addedDate;
+            this.ModifiedDate = modifiedDate;
+            this.PwnCount = pwnCount;
+            this.Description = description;
+            this.DataClasses = dataClasses;
+            this.IsVerified = isVerified;
+            this.IsSensitive = isSensitive;
+            this.IsRetired = isRetired;
+            this.IsSpamList = isSpamList;
         }
 
-        public string Name => this.name;
+        /// <summary>
+        /// Gets the name.
+        /// </summary>
+        /// <value>
+        /// The name.
+        /// </value>
+        public string Name { get; }
 
-        public string Title => this.title;
+        /// <summary>
+        /// Gets the title.
+        /// </summary>
+        /// <value>
+        /// The title.
+        /// </value>
+        public string Title { get; }
 
-        public string Domain => this.domain;
+        /// <summary>
+        /// Gets the domain.
+        /// </summary>
+        /// <value>
+        /// The domain.
+        /// </value>
+        public string Domain { get; }
 
-        public DateTime BreachDate => this.breachDate;
+        /// <summary>
+        /// Gets the breach date.
+        /// </summary>
+        /// <value>
+        /// The breach date.
+        /// </value>
+        public DateTime BreachDate { get; }
 
-        public DateTime AddedDate => this.addedDate;
+        /// <summary>
+        /// Gets the added date.
+        /// </summary>
+        /// <value>
+        /// The added date.
+        /// </value>
+        public DateTime AddedDate { get; }
 
-        public DateTime ModifiedDate => this.modifiedDate;
+        /// <summary>
+        /// Gets the modified date.
+        /// </summary>
+        /// <value>
+        /// The modified date.
+        /// </value>
+        public DateTime ModifiedDate { get; }
 
-        public int PwnCount => this.pwnCount;
+        /// <summary>
+        /// Gets the PWN count.
+        /// </summary>
+        /// <value>
+        /// The PWN count.
+        /// </value>
+        public int PwnCount { get; }
 
-        public string Description => this.description;
+        /// <summary>
+        /// Gets the description.
+        /// </summary>
+        /// <value>
+        /// The description.
+        /// </value>
+        public string Description { get; }
 
-        public List<string> DataClasses => this.dataClasses;
+        /// <summary>
+        /// Gets the data classes.
+        /// </summary>
+        /// <value>
+        /// The data classes.
+        /// </value>
+        public IEnumerable<string> DataClasses { get; }
 
-        public bool IsVerified => this.isVerified;
+        /// <summary>
+        /// Gets a value indicating whether this instance is verified.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if this instance is verified; otherwise, <c>false</c>.
+        /// </value>
+        public bool IsVerified { get; }
 
-        public bool IsSensitive => this.isSensitive;
+        /// <summary>
+        /// Gets a value indicating whether this instance is sensitive.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if this instance is sensitive; otherwise, <c>false</c>.
+        /// </value>
+        public bool IsSensitive { get; }
 
-        public bool IsRetired => this.isRetired;
+        /// <summary>
+        /// Gets a value indicating whether this instance is retired.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if this instance is retired; otherwise, <c>false</c>.
+        /// </value>
+        public bool IsRetired { get; }
 
-        public bool IsSpamList => this.isSpamList;
+        /// <summary>
+        /// Gets a value indicating whether this instance is spam list.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if this instance is spam list; otherwise, <c>false</c>.
+        /// </value>
+        public bool IsSpamList { get; }
 
+        /// <summary>
+        /// Converts to string.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="string" /> that represents this instance.
+        /// </returns>
         public override string ToString()
         {
             var sb = new StringBuilder();
@@ -96,7 +167,7 @@
             sb.AppendLine("DataClasses:");
             foreach (var dataClass in this.DataClasses)
             {
-                sb.AppendLine($"    {dataClass}");
+                sb.AppendLine($" {dataClass}");
             }
 
             sb.AppendLine($"IsVerified: {this.IsVerified}");
