@@ -18,7 +18,7 @@ Usage:
 ```csharp 
 async Task MyMethodPlainTextPassword()
 {
-    var client = new HIBP.PwnedPasswordClient();
+    var client = new HIBP.PwnedPasswordClient("MyAwesomeService");
     int pwns = await client.IsPasswordPwnedAsync("password1");
     if (pwns > 0)
     {
@@ -30,7 +30,7 @@ async Task MyMethodPlainTextPassword()
 
 async Task MyMethodPreHashedPassword()
 {
-    var client = new HIBP.PwnedPasswordClient();
+    var client = new HIBP.PwnedPasswordClient("MyAwesomeService");
     int pwns = await client.IsPasswordPwnedAsync("password1".ToSHA1(), isHash: true);
     if (pwns > 0)
     {
@@ -47,7 +47,7 @@ public void ConfigureServices(IServiceCollection services)
     services.AddHIBP(c =>
     {
         c.ApiKey = new ApiKey("MyKey");
-        c.ServiceName = "MyServiceName";
+        c.ServiceName = "MyAwesomeService";
     });
 }
 
