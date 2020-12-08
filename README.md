@@ -40,7 +40,7 @@ async Task MyMethodPreHashedPassword()
 
 ```
 
-# With .Net core dependency injection.
+## With .Net core dependency injection.
 ```csharp
 public void ConfigureServices(IServiceCollection services)
 {
