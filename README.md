@@ -77,4 +77,5 @@ Changes
  * Added pastes client. 
  * Added extension for easier injection and setup in netcore projects.
  * Expose `ToSHA1()`. for easy hashing when using the PwnedPasswords API.
+ * Update to .Net core 3.1
 
