@@ -3,7 +3,12 @@
 ![NuGet](https://img.shields.io/nuget/dt/HIBP.NET.svg)
 
 
-A simple .NET Core wrapper for the HIBP (Have I been pwned?) Api
+A .Net wrapper for the HIBP API.
+The full API is supported;
+ * PwnedPasswords
+ * Breaches
+ * Pastes
+
 
 Full credits given to Troy Hunt for creating and managing [Have I been pwned?](https://haveibeenpwned.com).
 
@@ -21,7 +26,30 @@ using (var api = new HIBP.BreachApi("My-Api-Key", "MyTotallyAwesomeService"))
     }
 }
 ```
-or with dependency injection
+```csharp 
+async Task MyMethodPlainTextPassword()
+{
+    var client = new HIBP.PwnedPasswordApi();
+    int pwns = await client.IsPasswordPwnedAsync("password1");
+    if (pwns > 0)
+    {
+        Console.WriteLine($"Password has been pwned: {pwns} times");
+    }
+}
+
+async Task MyMethodPreHashedPassword()
+{
+    var client = new HIBP.PwnedPasswordApi();
+    int pwns = await client.IsPasswordPwnedAsync("password1".ToSha1(), isHash: true);
+    if (pwns > 0)
+    {
+        Console.WriteLine("Password has been pwned");
+    }
+}
+
+```
+
+Using .Net core dependency injection.
 ```csharp
 public void ConfigureServices(IServiceCollection services)
 {
@@ -52,6 +80,8 @@ class MyClass
 Changes
 ===
 ### Breaking change coming in version 3.0
-ApiKey has been refactored to be a class of its own.
-Version 3 is mostly minor refactorings and addition of cancellationtokens on particular API calls instead of from the Base.
-Added middleware for easier injection and setup in netcore projects.
+ * ApiKey has been refactored to be a class of its own. (**BREAKING**)
+ * Renamed parameters to better match usage.
+ * Added pastes API. 
+ * Added middleware for easier injection and setup in netcore projects.
+
