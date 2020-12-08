@@ -15,12 +15,13 @@
             var config = new HIBPConfiguration();
             configurationFactory(config);
 
-            AddBreachApi(services, config.ApiKey, config.ServiceName);
-            AddPwnedPasswordApi(services, config.ServiceName);
+            AddBreachClient(services, config.ApiKey, config.ServiceName);
+            AddPwnedPasswordClient(services, config.ServiceName);
+            AddPastesClient(services, config.ApiKey, config.ServiceName);
         }
 
         /// <summary>
-        /// Adds the breach API.
+        /// Adds the breach client.
         /// </summary>
         /// <param name="services">The services.</param>
         /// <param name="key">The key.</param>
@@ -31,13 +32,24 @@
         }
 
         /// <summary>
-        /// Adds the Pwned password API.
+        /// Adds the Pwned password client.
         /// </summary>
         /// <param name="services">The services.</param>
         /// <param name="serviceName">Name of the service.</param>
         public static void AddPwnedPasswordApi(this IServiceCollection services, string serviceName)
         {
             services.AddSingleton<IPwnedPasswordClient, PwnedPasswordClient>(_ => new PwnedPasswordClient(serviceName));
+        }
+        
+        /// <summary>
+        /// Adds the Pastes client.
+        /// </summary>
+        /// <param name="services">The services.</param>
+        /// <param name="key">The key.</param>
+        /// <param name="serviceName">Name of the service.</param>
+        public static void AddBreachApi(this IServiceCollection services, ApiKey key, string serviceName)
+        {
+            services.AddSingleton<IPasteClient, PasteClient>(_ => new PasteClient(key, serviceName));
         }
     }
 }
