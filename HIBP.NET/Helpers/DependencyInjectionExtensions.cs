@@ -17,7 +17,7 @@
 
             AddBreachClient(services, config.ApiKey, config.ServiceName);
             AddPwnedPasswordClient(services, config.ServiceName);
-            AddPasteClient(services, config.ApiKey, config.ServiceName);
+            AddPastesClient(services, config.ApiKey, config.ServiceName);
         }
 
         /// <summary>
@@ -47,9 +47,9 @@
         /// <param name="services">The services.</param>
         /// <param name="key">The key.</param>
         /// <param name="serviceName">Name of the service.</param>
-        public static void AddPasteClient(this IServiceCollection services, ApiKey key, string serviceName)
+        public static void AddPastesClient(this IServiceCollection services, ApiKey key, string serviceName)
         {
-            services.AddSingleton<IPasteClient, PasteClient>(_ => new PasteClient(key, serviceName));
+            services.AddSingleton<IPastesClient, PastesClient>(_ => new PastesClient(key, serviceName));
         }
     }
 }
