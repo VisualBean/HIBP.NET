@@ -1,4 +1,4 @@
-﻿namespace HIBP.Apis
+﻿namespace HIBP
 {
     using System.Collections.Generic;
     using System.Threading;
@@ -6,18 +6,18 @@
     using HIBP.Responses;
 
     /// <summary>
-    /// 
+    /// The 'Have I Been Pwned' Pastes API client.
     /// </summary>
-    /// <seealso cref="HIBP.BaseApi" />
-    /// <seealso cref="HIBP.Apis.IPastesApi" />
-    public class PastesApi : BaseApi, IPastesApi
+    /// <seealso cref="ClientBase" />
+    /// <seealso cref="IPastesClient" />
+    public class PastesClient : ClientBase, IPastesClient
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="PastesApi"/> class.
+        /// Initializes a new instance of the <see cref="PastesClient"/> class.
         /// </summary>
         /// <param name="apiKey">The API key.</param>
         /// <param name="serviceName">The service name.</param>
-        public PastesApi(ApiKey apiKey, string serviceName)
+        public PastesClient(ApiKey apiKey, string serviceName)
             : base(apiKey, serviceName)
         {
         }

@@ -4,7 +4,7 @@
     using System.Text;
 
     /// <summary>
-    /// The 
+    /// The paste class.
     /// </summary>
     public class Paste
     {

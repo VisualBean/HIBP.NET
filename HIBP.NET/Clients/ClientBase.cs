@@ -5,24 +5,27 @@
     using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
-    using HIBP.Extensions;
+    using HIBP.Helpers;
 
     /// <summary>
     /// Base class for API usage.
     /// </summary>
     /// <seealso cref="IDisposable" />
-    public class BaseApi : IDisposable
+    public class ClientBase : IDisposable
     {
+        /// <summary>
+        /// The internal http client.
+        /// </summary>
         protected readonly HttpClient Client;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="BaseApi" /> class.
+        /// Initializes a new instance of the <see cref="ClientBase"/> class.
         /// The name of the client calling the API (used as user-agent).
         /// </summary>
         /// <param name="apiKey">The API key.</param>
         /// <param name="serviceName">The service name.</param>
-        /// <exception cref="ArgumentException">To interact with the HIBP API a name must be provided for the useragent string. This name is ment to be to distinguish your service from others. - serviceName</exception>
-        protected BaseApi(ApiKey apiKey, string serviceName)
+        /// <exception cref="ArgumentException">To interact with the HIBP API a name must be provided for the useragent string. This name is ment to be to distinguish your service from others. - serviceName.</exception>
+        protected ClientBase(ApiKey apiKey, string serviceName)
         {
             if (string.IsNullOrWhiteSpace(serviceName))
             {
@@ -38,6 +41,9 @@
             this.Client.DefaultRequestHeaders.Add("hibp-api-key", apiKey.Key);
         }
 
+        /// <summary>
+        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// </summary>
         public void Dispose()
         {
             this.Client.Dispose();

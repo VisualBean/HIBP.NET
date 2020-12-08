@@ -1,4 +1,4 @@
-﻿namespace HIBP.Extensions
+﻿namespace HIBP.Helpers
 {
     using System.Security.Cryptography;
     using System.Text;

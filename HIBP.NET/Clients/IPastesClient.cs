@@ -1,4 +1,4 @@
-﻿namespace HIBP.Apis
+﻿namespace HIBP
 {
     using System.Collections.Generic;
     using System.Threading;
@@ -6,9 +6,9 @@
     using HIBP.Responses;
 
     /// <summary>
-    /// The interface for the pastes api.
+    /// The Pastes API client interface.
     /// </summary>
-    public interface IPastesApi
+    public interface IPastesClient
     {
         /// <summary>
         /// Gets the pastes asynchronous.

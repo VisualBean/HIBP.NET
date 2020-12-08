@@ -4,22 +4,22 @@
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
-    using HIBP.Extensions;
+    using HIBP.Helpers;
 
     /// <summary>
-    /// The Have I Been Pwned PwnedPassword API Wrapper
+    /// The 'Have I Been Pwned' PwnedPassword API client.
     /// </summary>
-    /// <seealso cref="HIBP.BaseApi" />
-    /// <seealso cref="HIBP.IPwnedPasswordApi" />
-    public sealed class PwnedPasswordApi : BaseApi, IPwnedPasswordApi
+    /// <seealso cref="ClientBase" />
+    /// <seealso cref="IPwnedPasswordClient" />
+    public sealed class PwnedPasswordClient : ClientBase, IPwnedPasswordClient
     {
         private static readonly ApiKey ApiKey = new ApiKey("N/A");
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="PwnedPasswordApi"/> class.
+        /// Initializes a new instance of the <see cref="PwnedPasswordClient"/> class.
         /// </summary>
         /// <param name="serviceName">The name of the client calling the API (used as user-agent).</param>
-        public PwnedPasswordApi(string serviceName)
+        public PwnedPasswordClient(string serviceName)
             : base(ApiKey, serviceName)
         {
             this.Client.BaseAddress = new Uri("https://api.pwnedpasswords.com/");
@@ -32,12 +32,12 @@
         /// <param name="isHash">if set to <c>true</c> [is hash].</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>
-        /// The number of times a password has shown up as 'pwned'
+        /// The number of times a password has shown up as 'pwned'.
         /// </returns>
-        /// <exception cref="ArgumentNullException">plainTextPassword</exception>
+        /// <exception cref="ArgumentNullException">plainTextPassword.</exception>
         /// <remark>
         /// Performs searching in memory instead of sending the entire password/sha1 over the wire.
-        /// Will SHA1 the password internally
+        /// Will SHA1 the password internally.
         /// </remark>
         public async Task<int> IsPasswordPwnedAsync(string plainTextPassword, bool isHash = false, CancellationToken cancellationToken = default)
         {

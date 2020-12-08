@@ -14,7 +14,7 @@
         /// Initializes a new instance of the <see cref="Email"/> struct.
         /// </summary>
         /// <param name="email">The email.</param>
-        /// <exception cref="System.ArgumentException">Email is not valid.</exception>
+        /// <exception cref="ArgumentException">Email is not valid.</exception>
         public Email(string email)
         {
             if (!ValidateEmail(email))
@@ -82,7 +82,7 @@
         /// Converts to string.
         /// </summary>
         /// <returns>
-        /// A <see cref="System.String" /> that represents this instance.
+        /// A <see cref=string" /> that represents this instance.
         /// </returns>
         public override string ToString()
         {

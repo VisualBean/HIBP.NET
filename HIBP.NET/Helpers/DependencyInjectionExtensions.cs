@@ -1,4 +1,4 @@
-﻿namespace HIBP
+﻿namespace HIBP.Helpers
 {
     using System;
     using Microsoft.Extensions.DependencyInjection;
@@ -27,7 +27,7 @@
         /// <param name="serviceName">Name of the service.</param>
         public static void AddBreachApi(this IServiceCollection services, ApiKey key, string serviceName)
         {
-            services.AddSingleton<IBreachApi, BreachApi>(_ => new BreachApi(key, serviceName));
+            services.AddSingleton<IBreachClient, BreachClient>(_ => new BreachClient(key, serviceName));
         }
 
         /// <summary>
@@ -37,7 +37,7 @@
         /// <param name="serviceName">Name of the service.</param>
         public static void AddPwnedPasswordApi(this IServiceCollection services, string serviceName)
         {
-            services.AddSingleton<IPwnedPasswordApi, PwnedPasswordApi>(_ => new PwnedPasswordApi(serviceName));
+            services.AddSingleton<IPwnedPasswordClient, PwnedPasswordClient>(_ => new PwnedPasswordClient(serviceName));
         }
     }
 }

@@ -6,9 +6,9 @@
     using HIBP.Responses;
 
     /// <summary>
-    /// The Breach API Interface.
+    /// The Breach API client interface.
     /// </summary>
-    public interface IBreachApi
+    public interface IBreachClient
     {
         /// <summary>
         /// Gets the breach asynchronous.
@@ -16,7 +16,7 @@
         /// <param name="name">The name.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>
-        /// <see cref="Breach" /> if a breach of that name could be found
+        /// <see cref="Breach" /> if a breach of that name could be found.
         /// </returns>
         Task<Breach> GetBreachAsync(string name, CancellationToken cancellationToken = default);
 

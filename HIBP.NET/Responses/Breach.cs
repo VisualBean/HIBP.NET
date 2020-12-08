@@ -9,7 +9,6 @@
     /// </summary>
     public class Breach
     {
-
         /// <summary>
         /// Initializes a new instance of the <see cref="Breach"/> class.
         /// </summary>
