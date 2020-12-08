@@ -16,7 +16,7 @@ Usage:
 ===
 ## PwnedPasswords
 ```csharp 
-async Task MyMethodPlainTextPassword()
+async Task MyMethodPlainTextPasswordAsync()
 {
     var client = new HIBP.PwnedPasswordClient("MyAwesomeService");
     int pwns = await client.IsPasswordPwnedAsync("password1");
@@ -28,7 +28,7 @@ async Task MyMethodPlainTextPassword()
 
 // or
 
-async Task MyMethodPreHashedPassword()
+async Task MyMethodPreHashedPasswordAsync()
 {
     var client = new HIBP.PwnedPasswordClient("MyAwesomeService");
     int pwns = await client.IsPasswordPwnedAsync("password1".ToSHA1(), isHash: true);
@@ -71,7 +71,7 @@ class MyClass
         this.breachClient = breachClient;
     }
     
-    public async Task GetBreaches()
+    public async Task GetBreachesAsync()
     {
         var breaches = this.breachClient.GetBreachesAsync();
         ... do stuff..
