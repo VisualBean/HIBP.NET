@@ -17,7 +17,7 @@
 
             AddBreachClient(services, config.ApiKey, config.ServiceName);
             AddPwnedPasswordClient(services, config.ServiceName);
-            AddPastesClient(services, config.ApiKey, config.ServiceName);
+            AddPasteClient(services, config.ApiKey, config.ServiceName);
         }
 
         /// <summary>
