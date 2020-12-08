@@ -26,7 +26,7 @@
         /// <param name="services">The services.</param>
         /// <param name="key">The key.</param>
         /// <param name="serviceName">Name of the service.</param>
-        public static void AddBreachApi(this IServiceCollection services, ApiKey key, string serviceName)
+        public static void AddBreachClient(this IServiceCollection services, ApiKey key, string serviceName)
         {
             services.AddSingleton<IBreachClient, BreachClient>(_ => new BreachClient(key, serviceName));
         }
@@ -36,7 +36,7 @@
         /// </summary>
         /// <param name="services">The services.</param>
         /// <param name="serviceName">Name of the service.</param>
-        public static void AddPwnedPasswordApi(this IServiceCollection services, string serviceName)
+        public static void AddPwnedPasswordClient(this IServiceCollection services, string serviceName)
         {
             services.AddSingleton<IPwnedPasswordClient, PwnedPasswordClient>(_ => new PwnedPasswordClient(serviceName));
         }
@@ -47,7 +47,7 @@
         /// <param name="services">The services.</param>
         /// <param name="key">The key.</param>
         /// <param name="serviceName">Name of the service.</param>
-        public static void AddBreachApi(this IServiceCollection services, ApiKey key, string serviceName)
+        public static void AddPasteClient(this IServiceCollection services, ApiKey key, string serviceName)
         {
             services.AddSingleton<IPasteClient, PasteClient>(_ => new PasteClient(key, serviceName));
         }
