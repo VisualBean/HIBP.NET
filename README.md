@@ -18,7 +18,7 @@ Usage:
 ```csharp 
 async Task MyMethodPlainTextPassword()
 {
-    var client = new HIBP.PwnedPasswordApi();
+    var client = new HIBP.PwnedPasswordClient();
     int pwns = await client.IsPasswordPwnedAsync("password1");
     if (pwns > 0)
     {
@@ -30,7 +30,7 @@ async Task MyMethodPlainTextPassword()
 
 async Task MyMethodPreHashedPassword()
 {
-    var client = new HIBP.PwnedPasswordApi();
+    var client = new HIBP.PwnedPasswordClient();
     int pwns = await client.IsPasswordPwnedAsync("password1".ToSHA1(), isHash: true);
     if (pwns > 0)
     {
@@ -53,15 +53,15 @@ public void ConfigureServices(IServiceCollection services)
 
 class MyClass
 {
-    private readonly IBreachApi breachApi;
-    public MyClass(IBreachApi breachApi)
+    private readonly IBreachClient breachClient;
+    public MyClass(IBreachClient breachClient)
     {
-        this.breachApi = breachApi;
+        this.breachClient = breachClient;
     }
     
     public async Task GetBreaches()
     {
-        var breaches = this.breachApi.GetBreachesAsync();
+        var breaches = this.breachClient.GetBreachesAsync();
         ... do stuff..
     }
 }
@@ -77,4 +77,5 @@ Changes
  * Added pastes client. 
  * Added extension for easier injection and setup in netcore projects.
  * Expose `ToSHA1()`. for easy hashing when using the PwnedPasswords API.
+ * Update to .Net core 3.1
 
