@@ -14,21 +14,6 @@ Full credits given to Troy Hunt for creating and managing [Have I been pwned?](h
 
 Usage:
 ===
-
-### Example:
-
-## Using
-```csharp
-using (var api = new HIBP.BreachApi("My-Api-Key", "MyTotallyAwesomeService"))
-{
-    var result = await api.GetBreachesAsync();
-    foreach(var breach in result)
-    {
-        Console.WriteLine(breach.ToString());
-    }
-}
-```
-
 ## PwnedPasswords
 ```csharp 
 async Task MyMethodPlainTextPassword()
