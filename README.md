@@ -41,6 +41,7 @@ async Task MyMethodPreHashedPasswordAsync()
 ```
 
 ## With .Net core dependency injection.
+### Adding the clients
 ```csharp
 // for all clients
 public void ConfigureServices(IServiceCollection services)
@@ -51,8 +52,9 @@ public void ConfigureServices(IServiceCollection services)
         c.ServiceName = "MyAwesomeService";
     });
 }
-
-// or for individual clients
+```
+or you can add individual clients
+```csharp
 public void ConfigureServices(IServiceCollection services)
 {
     services.AddBreachClient(c =>
@@ -60,9 +62,15 @@ public void ConfigureServices(IServiceCollection services)
         c.ApiKey = new ApiKey("MyKey");
         c.ServiceName = "MyAwesomeService";
     });
-}
+    
+    services.AddPwnedPasswordsClient("MyAwesomeService");
+    
+    services.AddPastesClient(new ApiKey("MyKey"), "MyAwesomeService");
+ }
+```
 
-// injection
+Inject the client.
+```csharp
 class MyClass
 {
     private readonly IBreachClient breachClient;
@@ -74,7 +82,7 @@ class MyClass
     public async Task GetBreachesAsync()
     {
         var breaches = this.breachClient.GetBreachesAsync();
-        ... do stuff..
+        // do stuff..
     }
 }
 ```
