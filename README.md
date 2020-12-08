@@ -3,25 +3,44 @@
 ![NuGet](https://img.shields.io/nuget/dt/HIBP.NET.svg)
 
 
-A simple .NET Core wrapper for the HIBP (Have I been pwned?) Api
+A .Net wrapper for the HIBP API.
+The full API is supported;
+ * PwnedPasswords
+ * Breaches
+ * Pastes
+
 
 Full credits given to Troy Hunt for creating and managing [Have I been pwned?](https://haveibeenpwned.com).
 
 Usage:
 ===
-
-### Example:
-```csharp
-using (var api = new HIBP.BreachApi("My-Api-Key", "MyTotallyAwesomeService"))
+## PwnedPasswords
+```csharp 
+async Task MyMethodPlainTextPassword()
 {
-    var result = await api.GetBreachesAsync();
-    foreach(var breach in result)
+    var client = new HIBP.PwnedPasswordApi();
+    int pwns = await client.IsPasswordPwnedAsync("password1");
+    if (pwns > 0)
     {
-        Console.WriteLine(breach.ToString());
+        Console.WriteLine($"Password has been pwned: {pwns} times");
     }
 }
+
+// or
+
+async Task MyMethodPreHashedPassword()
+{
+    var client = new HIBP.PwnedPasswordApi();
+    int pwns = await client.IsPasswordPwnedAsync("password1".ToSHA1(), isHash: true);
+    if (pwns > 0)
+    {
+        Console.WriteLine("Password has been pwned");
+    }
+}
+
 ```
-or with dependency injection
+
+## With .Net core dependency injection.
 ```csharp
 public void ConfigureServices(IServiceCollection services)
 {
@@ -51,7 +70,11 @@ class MyClass
 
 Changes
 ===
-### Breaking change coming in version 3.0
-ApiKey has been refactored to be a class of its own.
-Version 3 is mostly minor refactorings and addition of cancellationtokens on particular API calls instead of from the Base.
-Added middleware for easier injection and setup in netcore projects.
+### Breaking changes are coming in version 3.0
+ * ApiKey has been refactored to be a class of its own. (**BREAKING**)
+ * Renamed API clients from `{name}Api` to `{name}Client` (**BREAKING**)
+ * Renamed parameters to better match usage.
+ * Added pastes client. 
+ * Added extension for easier injection and setup in netcore projects.
+ * Expose `ToSHA1()`. for easy hashing when using the PwnedPasswords API.
+

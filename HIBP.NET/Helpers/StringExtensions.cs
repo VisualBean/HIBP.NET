@@ -6,7 +6,7 @@
     /// <summary>
     /// String extensions.
     /// </summary>
-    internal static class StringExtensions
+    public static class StringExtensions
     {
         /// <summary>
         /// Gets first 5 characters of a string.
@@ -15,7 +15,7 @@
         /// <returns>
         /// The first 5 characters of a string.
         /// </returns>
-        public static string First5(this string s)
+        internal static string First5(this string s)
         {
             return s.Substring(0, 5);
         }
@@ -25,7 +25,7 @@
         /// </summary>
         /// <param name="b">if set to <c>true</c> [b].</param>
         /// <returns>A string representing the boolean value.</returns>
-        public static string ToBooleanString(this bool b)
+        internal static string ToBooleanString(this bool b)
         {
             return b == true ? "true" : "false";
         }
@@ -35,7 +35,7 @@
         /// </summary>
         /// <param name="s">The s.</param>
         /// <returns>A sha1 hashed string.</returns>
-        internal static string ToSHA1(this string s)
+        public static string ToSHA1(this string s)
         {
             using (var provider = new SHA1Managed())
             {
