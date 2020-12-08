@@ -72,9 +72,9 @@ Changes
 ===
 ### Breaking changes are coming in version 3.0
  * ApiKey has been refactored to be a class of its own. (**BREAKING**)
- * Renamed API clients from {name}Api to {name}Client (**BREAKING**)
+ * Renamed API clients from `{name}Api` to `{name}Client` (**BREAKING**)
  * Renamed parameters to better match usage.
- * Added pastes API. 
+ * Added pastes client. 
  * Added extension for easier injection and setup in netcore projects.
- * Expose ´ToSHA1()´. for easy hashing when using the PwnedPasswords API.
+ * Expose `ToSHA1()`. for easy hashing when using the PwnedPasswords API.
 
