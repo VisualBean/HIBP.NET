@@ -42,6 +42,7 @@ async Task MyMethodPreHashedPassword()
 
 ## With .Net core dependency injection.
 ```csharp
+// for all clients
 public void ConfigureServices(IServiceCollection services)
 {
     services.AddHIBP(c =>
@@ -51,6 +52,17 @@ public void ConfigureServices(IServiceCollection services)
     });
 }
 
+// or for individual clients
+public void ConfigureServices(IServiceCollection services)
+{
+    services.AddBreachClient(c =>
+    {
+        c.ApiKey = new ApiKey("MyKey");
+        c.ServiceName = "MyAwesomeService";
+    });
+}
+
+// injection
 class MyClass
 {
     private readonly IBreachClient breachClient;
