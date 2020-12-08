@@ -16,6 +16,8 @@ Usage:
 ===
 
 ### Example:
+
+## Using
 ```csharp
 using (var api = new HIBP.BreachApi("My-Api-Key", "MyTotallyAwesomeService"))
 {
@@ -26,6 +28,8 @@ using (var api = new HIBP.BreachApi("My-Api-Key", "MyTotallyAwesomeService"))
     }
 }
 ```
+
+## PwnedPasswords
 ```csharp 
 async Task MyMethodPlainTextPassword()
 {
@@ -36,6 +40,8 @@ async Task MyMethodPlainTextPassword()
         Console.WriteLine($"Password has been pwned: {pwns} times");
     }
 }
+
+// or
 
 async Task MyMethodPreHashedPassword()
 {
@@ -49,7 +55,7 @@ async Task MyMethodPreHashedPassword()
 
 ```
 
-Using .Net core dependency injection.
+# With .Net core dependency injection.
 ```csharp
 public void ConfigureServices(IServiceCollection services)
 {
