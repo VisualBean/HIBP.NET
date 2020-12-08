@@ -31,7 +31,7 @@ async Task MyMethodPlainTextPassword()
 async Task MyMethodPreHashedPassword()
 {
     var client = new HIBP.PwnedPasswordApi();
-    int pwns = await client.IsPasswordPwnedAsync("password1".ToSha1(), isHash: true);
+    int pwns = await client.IsPasswordPwnedAsync("password1".ToSHA1(), isHash: true);
     if (pwns > 0)
     {
         Console.WriteLine("Password has been pwned");
@@ -70,9 +70,11 @@ class MyClass
 
 Changes
 ===
-### Breaking change coming in version 3.0
+### Breaking changes are coming in version 3.0
  * ApiKey has been refactored to be a class of its own. (**BREAKING**)
+ * Renamed API clients from {name}Api to {name}Client (**BREAKING**)
  * Renamed parameters to better match usage.
  * Added pastes API. 
- * Added middleware for easier injection and setup in netcore projects.
+ * Added extension for easier injection and setup in netcore projects.
+ * Expose ´ToSHA1()´. for easy hashing when using the PwnedPasswords API.
 
