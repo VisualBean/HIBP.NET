@@ -10,7 +10,7 @@
     /// </summary>
     /// <seealso cref="HIBP.BaseApi" />
     /// <seealso cref="HIBP.Apis.IPastesApi" />
-    public class PastesApi : BaseApi, IPastesApi
+    public sealed class PastesApi : BaseApi, IPastesApi
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="PastesApi"/> class.
