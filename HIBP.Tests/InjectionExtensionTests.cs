@@ -10,6 +10,9 @@ namespace HIBP.Tests
     [TestClass]
     public class InjectionExtensionTests
     {
+        private static ApiKey validKey = new ApiKey("abc");
+        private static string validServiceName = "test";
+
         [TestMethod]
         [DataRow(typeof(IPwnedPasswordClient))]
         [DataRow(typeof(IBreachClient))]
@@ -17,12 +20,108 @@ namespace HIBP.Tests
         public void AddHIBP_AddsAllClient(Type type)
         {
             var serviceCollection = new ServiceCollection();
-            serviceCollection.AddHIBP(f => { });
-            var service = serviceCollection.FirstOrDefault(s => s.ServiceType == type);
+            serviceCollection.AddHIBP(c => 
+            {
+                c.ApiKey = validKey;
+                c.ServiceName = validServiceName;
+            });
+
+            var serviceProvider = serviceCollection.BuildServiceProvider();
+            var service = serviceProvider.GetRequiredService(type);
 
             Assert.IsNotNull(service);
-            Assert.IsTrue(service.Lifetime == ServiceLifetime.Singleton);
         }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidApiKeyException))]
+        public void AddHIBP_WithoutApiKey_Throws()
+        {
+            var serviceCollection = new ServiceCollection();
+            serviceCollection.AddHIBP(c =>
+            {
+                c.ServiceName = validServiceName;
+            });
+
+            var _ = serviceCollection.BuildServiceProvider();
+        }
+
+        [TestMethod]
+        [DataRow(null)]
+        [DataRow("")]
+        [DataRow(" ")]
+        [ExpectedException(typeof(InvalidServiceNameException))]
+        public void AddHIBP_WithInvalidServiceName_Throws(string serviceName)
+        {
+            var serviceCollection = new ServiceCollection();
+            serviceCollection.AddHIBP(c =>
+            {
+                c.ServiceName = serviceName;
+                c.ApiKey = validKey;
+            });
+
+            var _ = serviceCollection.BuildServiceProvider();
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidApiKeyException))]
+        public void AddBreachClient_WithoutApiKey_Throws()
+        {
+            var serviceCollection = new ServiceCollection();
+            serviceCollection.AddBreachClient(null, validServiceName);
+
+            var _ = serviceCollection.BuildServiceProvider();
+        }
+
+        [TestMethod]
+        [DataRow(null)]
+        [DataRow("")]
+        [DataRow(" ")]
+        [ExpectedException(typeof(InvalidServiceNameException))]
+        public void AddBreachClient_WithInvalidServiceName_Throws(string serviceName)
+        {
+            var serviceCollection = new ServiceCollection();
+            serviceCollection.AddBreachClient(validKey, serviceName);
+
+            var _ = serviceCollection.BuildServiceProvider();
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidApiKeyException))]
+        public void AddPastesClient_WithoutApiKey_Throws()
+        {
+            var serviceCollection = new ServiceCollection();
+            serviceCollection.AddPastesClient(null, validServiceName);
+
+            var _ = serviceCollection.BuildServiceProvider();
+        }
+
+        [TestMethod]
+        [DataRow(null)]
+        [DataRow("")]
+        [DataRow(" ")]
+        [ExpectedException(typeof(InvalidServiceNameException))]
+        public void AddPastesClient_WithInvalidServiceName_Throws(string serviceName)
+        {
+            var serviceCollection = new ServiceCollection();
+            serviceCollection.AddPastesClient(validKey, serviceName);
+
+            var _ = serviceCollection.BuildServiceProvider();
+        }
+
+
+        [TestMethod]
+        [DataRow(null)]
+        [DataRow("")]
+        [DataRow(" ")]
+        [ExpectedException(typeof(InvalidServiceNameException))]
+        public void AddPwnedPasswordClient_WithInvalidServiceName_Throws(string serviceName)
+        {
+            var serviceCollection = new ServiceCollection();
+            serviceCollection.AddPwnedPasswordClient(serviceName);
+
+            var _ = serviceCollection.BuildServiceProvider();
+        }
+
 
         [TestMethod]
         public void AddBreachClient_AddsBreachClient()
@@ -32,7 +131,7 @@ namespace HIBP.Tests
             var service = serviceCollection.FirstOrDefault(s => s.ServiceType == typeof(IBreachClient));
 
             Assert.IsNotNull(service);
-            Assert.IsTrue(service.Lifetime == ServiceLifetime.Singleton);
+            Assert.AreEqual(ServiceLifetime.Transient, service.Lifetime);
         }
 
         [TestMethod]
@@ -43,7 +142,7 @@ namespace HIBP.Tests
             var service = serviceCollection.FirstOrDefault(s => s.ServiceType == typeof(IPwnedPasswordClient));
 
             Assert.IsNotNull(service);
-            Assert.IsTrue(service.Lifetime == ServiceLifetime.Singleton);
+            Assert.AreEqual(ServiceLifetime.Transient, service.Lifetime);
         }
 
         [TestMethod]
@@ -54,7 +153,7 @@ namespace HIBP.Tests
             var service = serviceCollection.FirstOrDefault(s => s.ServiceType == typeof(IPastesClient));
 
             Assert.IsNotNull(service);
-            Assert.IsTrue(service.Lifetime == ServiceLifetime.Singleton);
+            Assert.AreEqual(ServiceLifetime.Transient, service.Lifetime);
         }
 
     }

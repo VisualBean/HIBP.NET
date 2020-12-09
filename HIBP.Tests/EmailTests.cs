@@ -11,9 +11,10 @@
         [DataRow("")]
         [DataRow(" ")]
         [DataRow("a")]
+        [DataRow("@a")]
         [DataRow("a@a")]
+        [DataRow("a@a.a")]
         [DataRow("a.com")]
-        [DataRow("a@a.c")]
         [ExpectedException(typeof(ArgumentException))]
         public void Email_WithInvalidInput_Throws(string input)
         {

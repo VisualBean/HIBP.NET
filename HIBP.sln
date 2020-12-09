@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27130.2020
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30717.126
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HIBP", "HIBP.NET\HIBP.csproj", "{DD0DCBA2-71A1-499E-AFB7-77A6E1003808}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HIBP.Tests", "HIBP.Tests\HIBP.Tests.csproj", "{F5E71528-253D-4BBF-B7DA-5D52A779FB2B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{DD0DCBA2-71A1-499E-AFB7-77A6E1003808}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DD0DCBA2-71A1-499E-AFB7-77A6E1003808}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DD0DCBA2-71A1-499E-AFB7-77A6E1003808}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F5E71528-253D-4BBF-B7DA-5D52A779FB2B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F5E71528-253D-4BBF-B7DA-5D52A779FB2B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F5E71528-253D-4BBF-B7DA-5D52A779FB2B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F5E71528-253D-4BBF-B7DA-5D52A779FB2B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
