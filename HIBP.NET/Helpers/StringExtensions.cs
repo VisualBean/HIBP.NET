@@ -9,6 +9,26 @@
     public static class StringExtensions
     {
         /// <summary>
+        /// Converts to sha1.
+        /// </summary>
+        /// <param name="s">The s.</param>
+        /// <returns>A sha1 hashed string.</returns>
+        public static string ToSHA1(this string s)
+        {
+            using (var provider = new SHA1Managed())
+            {
+                var hash = provider.ComputeHash(Encoding.UTF8.GetBytes(s));
+                var sb = new StringBuilder(hash.Length * 2);
+                foreach (var @byte in hash)
+                {
+                    sb.Append(@byte.ToString("X2"));
+                }
+
+                return sb.ToString();
+            }
+        }
+
+        /// <summary>
         /// Gets first 5 characters of a string.
         /// </summary>
         /// <param name="s">The s.</param>
@@ -28,26 +48,6 @@
         internal static string ToBooleanString(this bool b)
         {
             return b == true ? "true" : "false";
-        }
-
-        /// <summary>
-        /// Converts to sha1.
-        /// </summary>
-        /// <param name="s">The s.</param>
-        /// <returns>A sha1 hashed string.</returns>
-        public static string ToSHA1(this string s)
-        {
-            using (var provider = new SHA1Managed())
-            {
-                var hash = provider.ComputeHash(Encoding.UTF8.GetBytes(s));
-                var sb = new StringBuilder(hash.Length * 2);
-                foreach (var @byte in hash)
-                {
-                    sb.Append(@byte.ToString("X2"));
-                }
-
-                return sb.ToString();
-            }
         }
     }
 }
