@@ -1,6 +1,7 @@
 ﻿namespace HIBP
 {
     using System.Collections.Generic;
+    using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
     using HIBP.Responses;
@@ -13,12 +14,13 @@
     public class PastesClient : ClientBase, IPastesClient
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="PastesClient"/> class.
+        /// Initializes a new instance of the <see cref="PastesClient" /> class.
         /// </summary>
         /// <param name="apiKey">The API key.</param>
         /// <param name="serviceName">The service name.</param>
-        public PastesClient(ApiKey apiKey, string serviceName)
-            : base(apiKey, serviceName)
+        /// <param name="client">The client. If none is provided, a new one will be created.</param>
+        public PastesClient(ApiKey apiKey, string serviceName, HttpClient client = null)
+            : base(apiKey, serviceName, client)
         {
         }
 

@@ -14,31 +14,67 @@
     public class ClientBase : IDisposable
     {
         /// <summary>
-        /// The internal http client.
+        /// The user agent header
         /// </summary>
-        protected readonly HttpClient Client;
+        protected const string UserAgentHeader = "user-agent";
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ClientBase"/> class.
+        /// The hibp API key header
+        /// </summary>
+        protected const string HIBPApiKeyHeader = "hibp-api-key";
+
+        /// <summary>
+        /// The internal http client.
+        /// </summary>
+        private readonly HttpClient client;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ClientBase" /> class.
         /// The name of the client calling the API (used as user-agent).
         /// </summary>
         /// <param name="apiKey">The API key.</param>
         /// <param name="serviceName">The service name.</param>
+        /// <param name="httpClient">The HTTP client.</param>
         /// <exception cref="ArgumentException">To interact with the HIBP API a name must be provided for the useragent string. This name is ment to be to distinguish your service from others. - serviceName.</exception>
-        protected ClientBase(ApiKey apiKey, string serviceName)
+        protected ClientBase(ApiKey apiKey, string serviceName, HttpClient httpClient = null)
+            : this(httpClient, apiKey, serviceName)
         {
-            if (string.IsNullOrWhiteSpace(serviceName))
+        }
+
+        private ClientBase(HttpClient client, ApiKey apiKey, string serviceName)
+        {
+            if (apiKey == null)
             {
-                throw new ArgumentException("To interact with the HIBP API a name must be provided for the useragent string. This name is ment to be to distinguish your service from others.", nameof(serviceName));
+                throw new InvalidApiKeyException();
             }
 
-            this.Client = new HttpClient()
+            if (string.IsNullOrWhiteSpace(serviceName))
             {
-                BaseAddress = new Uri("https://haveibeenpwned.com/api/v3/"),
-            };
+                throw new InvalidServiceNameException();
+            }
 
-            this.Client.DefaultRequestHeaders.Add("user-agent", serviceName);
-            this.Client.DefaultRequestHeaders.Add("hibp-api-key", apiKey.Key);
+            if (client == null)
+            {
+                this.client = new HttpClient();
+            }
+            else
+            {
+                this.client = client;
+            }
+
+            this.client.BaseAddress = new Uri("https://haveibeenpwned.com/api/v3/");
+            this.SetMandatoryDefaultRequestHeaders(apiKey, serviceName);
+        }
+
+        /// <summary>
+        /// Sets the mandatory request headers.
+        /// </summary>
+        /// <param name="apiKey">The API key.</param>
+        /// <param name="serviceName">Name of the service.</param>
+        protected void SetMandatoryDefaultRequestHeaders(ApiKey apiKey, string serviceName)
+        {
+            this.client.DefaultRequestHeaders.Add(UserAgentHeader, serviceName);
+            this.client.DefaultRequestHeaders.Add(HIBPApiKeyHeader, apiKey.Key);
         }
 
         /// <summary>
@@ -46,25 +82,28 @@
         /// </summary>
         public void Dispose()
         {
-            this.Client.Dispose();
+            this.client.Dispose();
             GC.SuppressFinalize(this);
         }
 
-        /// <summary>Basic GetAsync T.</summary>
+        /// <summary>
+        /// Basic GetAsync T.
+        /// </summary>
         /// <typeparam name="T">The type to deserialize the response data into.</typeparam>
         /// <param name="requestUri">The requestUri to call.</param>
         /// <param name="cancellationToken">The cancellationToken.</param>
-        /// <returns>a <see cref="Task{T}" />.</returns>
+        /// <returns>
+        /// a <see cref="Task{T}" />.
+        /// </returns>
+        /// <exception cref="System.ArgumentException">
+        /// ApiKey is not valid.
+        /// or
+        /// User-Agent is not valid.
+        /// </exception>
+        /// <exception cref="System.Exception">Your request has been throttled, please try again later.</exception>
         protected async Task<T> GetAsync<T>(string requestUri, CancellationToken cancellationToken)
         {
-            var response = await this.Client.GetAsync(requestUri, cancellationToken);
-            this.ThrowOnErrorResponse(response);
-
-            if (response.StatusCode == HttpStatusCode.NotFound)
-            {
-                return default;
-            }
-
+            var response = await this.GetAsync(requestUri, cancellationToken);
             return await response.Content.ReadAsJsonAsync<T>();
         }
 
@@ -73,33 +112,37 @@
         /// </summary>
         /// <param name="requestUri">The request URI.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>a <see cref="HttpRequestMessage"/>.</returns>
+        /// <returns>
+        /// a <see cref="HttpRequestMessage" />.
+        /// </returns>
+        /// <exception cref="System.ArgumentException">
+        /// ApiKey is not valid.
+        /// or
+        /// User-Agent is not valid.
+        /// </exception>
+        /// <exception cref="System.Exception">Your request has been throttled, please try again later.</exception>
         protected async Task<HttpResponseMessage> GetAsync(string requestUri, CancellationToken cancellationToken)
         {
-            var response = await this.Client.GetAsync(requestUri, cancellationToken);
-            this.ThrowOnErrorResponse(response);
-            return response;
-        }
-
-        private void ThrowOnErrorResponse(HttpResponseMessage response)
-        {
+            var response = await this.client.GetAsync(requestUri, cancellationToken);
             switch (response.StatusCode)
             {
                 case (HttpStatusCode)401:
                 {
-                    throw new ArgumentException("ApiKey is not valid.");
+                    throw new InvalidApiKeyException();
                 }
 
                 case (HttpStatusCode)403:
                 {
-                    throw new ArgumentException("User-Agent is not valid.");
+                    throw new InvalidServiceNameException();
                 }
 
                 case (HttpStatusCode)429:
                 {
-                    throw new Exception("Your request has been throttled, please try again later");
+                    throw new TooManyRequestsException();
                 }
             }
+
+            return response;
         }
     }
 }

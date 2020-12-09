@@ -2,6 +2,7 @@
 {
     using System;
     using System.Linq;
+    using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
     using HIBP.Helpers;
@@ -16,13 +17,13 @@
         private static readonly ApiKey ApiKey = new ApiKey("N/A");
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="PwnedPasswordClient"/> class.
+        /// Initializes a new instance of the <see cref="PwnedPasswordClient" /> class.
         /// </summary>
         /// <param name="serviceName">The name of the client calling the API (used as user-agent).</param>
-        public PwnedPasswordClient(string serviceName)
-            : base(ApiKey, serviceName)
+        /// <param name="client">The client. If none is provided, a new one will be created.</param>
+        public PwnedPasswordClient(string serviceName, HttpClient client = null)
+            : base(ApiKey, serviceName, client)
         {
-            this.Client.BaseAddress = new Uri("https://api.pwnedpasswords.com/");
         }
 
         /// <summary>
@@ -41,7 +42,7 @@
         /// </remark>
         public async Task<int> IsPasswordPwnedAsync(string plainTextPassword, bool isHash = false, CancellationToken cancellationToken = default)
         {
-            if (string.IsNullOrEmpty(plainTextPassword))
+            if (string.IsNullOrWhiteSpace(plainTextPassword))
             {
                 throw new ArgumentNullException(nameof(plainTextPassword));
             }
@@ -53,7 +54,7 @@
                 sha1 = plainTextPassword.ToSHA1();
             }
 
-            var response = await this.GetAsync($"range/{sha1.First5()}", cancellationToken);
+            var response = await this.GetAsync($"https://api.pwnedpasswords.com/range/{sha1.First5()}", cancellationToken);
             if (response.IsSuccessStatusCode)
             {
                 var hashString = await response.Content.ReadAsStringAsync();

@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
     using HIBP.Helpers;
@@ -20,8 +21,9 @@
         /// </summary>
         /// <param name="apiKey">The apikey for accessing the HIBP API.</param>
         /// <param name="serviceName"> The name of the client calling the API (used as user-agent).</param>
-        public BreachClient(ApiKey apiKey, string serviceName)
-            : base(apiKey, serviceName)
+        /// <param name="client">The client. If none is provided, a new one will be created.</param>
+        public BreachClient(ApiKey apiKey, string serviceName, HttpClient client = null)
+            : base(apiKey, serviceName, client)
         {
         }
 
@@ -34,7 +36,7 @@
         /// <exception cref="ArgumentNullException">name.</exception>
         public async Task<Breach> GetBreachAsync(string name, CancellationToken cancellationToken = default)
         {
-            if (string.IsNullOrEmpty(name))
+            if (string.IsNullOrWhiteSpace(name))
             {
                 throw new ArgumentNullException(nameof(name));
             }
