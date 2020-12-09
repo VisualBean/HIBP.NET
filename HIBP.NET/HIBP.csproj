@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <PackageId>HIBP.NET</PackageId>
-    <Version>2.0.0</Version>
+    <Version>3.0.0</Version>
     <Authors>VisualBean</Authors>
     <Company>VisualBean</Company>
     <Product>HIBP.NET</Product>
@@ -13,9 +13,10 @@
     <RepositoryType>Github</RepositoryType>
     <PackageTags>Security, HaveIBeenPwned, HIBP, API, Secure, Have I Been Pwned, Troy Hunt</PackageTags>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <AssemblyVersion>2.0.0.0</AssemblyVersion>
-    <FileVersion>2.0.0.0</FileVersion>
-    <PackageReleaseNotes>The API's for searching breaches now required an APIkey, this has been implemented in the API. also non async methods has been removed.</PackageReleaseNotes>
+    <AssemblyVersion>3.0.0.0</AssemblyVersion>
+    <FileVersion>3.0.0.0</FileVersion>
+    <PackageReleaseNotes>See changes at https://github.com/VisualBean/HIBP.NET</PackageReleaseNotes>
+    <PackageLicenseUrl>https://github.com/VisualBean/HIBP.NET/blob/master/LICENSE</PackageLicenseUrl>
   </PropertyGroup>
 
   <ItemGroup>
