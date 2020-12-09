@@ -17,6 +17,11 @@
         /// <exception cref="ArgumentException">Email is not valid.</exception>
         public Email(string email)
         {
+            if (string.IsNullOrWhiteSpace(email))
+            {
+                throw new ArgumentException("Email must be supplied");
+            }
+
             if (!ValidateEmail(email))
             {
                 throw new ArgumentException("Email is not valid.", nameof(email));
