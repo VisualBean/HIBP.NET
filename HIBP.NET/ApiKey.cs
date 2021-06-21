@@ -16,7 +16,7 @@
         {
             if (string.IsNullOrWhiteSpace(apiKey))
             {
-                throw new ArgumentException("To interact with the HIBP API a valid apikey must be provided. You can get it here: https://haveibeenpwned.com/API/Key", nameof(apiKey));
+                throw new ArgumentException("To interact with the HIBP API a valid apikey must be provided. You can get it here: https://haveibeenpwned.com/API/Key.", nameof(apiKey));
             }
 
             this.Key = apiKey;
