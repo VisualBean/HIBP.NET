@@ -2,10 +2,10 @@ name: .Net matrix
 
 on:
   push:
-    branches: [ main ]
+    branches: [ master ]
     paths-ignore: '*.md'
   pull_request:
-    branches: [ main ]
+    branches: [ master ]
 
 jobs:
   build:
