@@ -19,7 +19,7 @@
         {
             if (string.IsNullOrWhiteSpace(email))
             {
-                throw new ArgumentException("Email must be supplied");
+                throw new ArgumentException("Email must be supplied.");
             }
 
             if (!ValidateEmail(email))
